@@ -1,0 +1,83 @@
+<script type="text/javascript">
+    RED.nodes.registerType('interpolate', {
+        category: 'function',
+        color: '#a6bbcf',
+        icon: "serial.png",
+
+        defaults: {
+            name:           {value: ""},
+            inputField:     {value: "payload", required: true},
+            inputFieldType: {value: "msg",     required: true},
+            points:         {value: []}
+        },
+
+        inputs: 1,
+        outputs: 1,
+
+        label: function() {
+            return this.name || "interpolate";
+        },
+
+        oneditprepare: function() {
+            $("#node-input-inputField").typedInput({
+                default: 'msg',
+                types: ['msg'],
+                typeField: $("#node-input-inputFieldType")
+            });
+
+            var rows = $("#node-input-interpolation-points-container").editableList({
+                header: $("<div><span style='width:40%; display: inline-grid'>Input</span><span style='display: inline-grid'>Output</span></div>"),
+                addItem: function(row, index, data) {
+                    var div    = $('<div/>',   {style: "whiteSpace:nowrap"}).appendTo(row);
+                    var input  = $('<input/>', {class:"node-input-input", type:"text",style:"width:40%;display:inline-grid"}).appendTo(div).typedInput({types:["num"]});
+                    var output = $('<input/>', {class:"node-input-output",type:"text",style:"width:40%;margin-left:10px;display:inline-grid"}).appendTo(div).typedInput({types:["num"]});
+                    input.typedInput('value', data.x);
+                    output.typedInput('value', data.y);
+
+                },
+                removable: true
+            });
+
+            if (this.points) {
+                this.points.forEach(function(elem) {
+                    rows.editableList("addItem", {"x": elem.x, "y": elem.y});
+                });
+            }
+        },
+
+        oneditsave: function() {
+            var rows = $("#node-input-interpolation-points-container").editableList("items");
+            var points = [];
+            rows.each(function(elem) {
+                var row = $(this);
+                var x = row.find(".node-input-input").typedInput("value");
+                var y = row.find(".node-input-output").typedInput("value");
+                points.push({"x": x, "y": y})
+            });
+
+            points.sort(function(a,b) {
+                return a.x - b.x;
+            });
+            this.points = points;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="interpolate">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-inputField"><i class="fa fa-edit"></i> Input</label>
+        <input type="text" id="node-input-inputField" style="width:250px;">
+        <input type="hidden" id="node-input-inputFieldType">
+    </div>
+
+    <div class="form-row" style="margin-bottom:0;">
+        <label><i class="fa fa-list"></i> Points</label>
+    </div>
+    <div class="form-row node-input-interpolation-points-container-row">
+        <ol id="node-input-interpolation-points-container" style="min-height: 150px"></ol>
+    </div>
+</script>

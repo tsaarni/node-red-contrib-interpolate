@@ -1,0 +1,29 @@
+{
+  "name": "node-red-contrib-interpolate",
+  "version": "0.0.1",
+  "description": "piecewise linear interpolation function",
+  "main": "interpolate.js",
+  "scripts": {
+    "test": "mocha \"test/**/*_spec.js\"",
+    "nodered": "nodemon --verbose node_modules/.bin/node-red"
+  },
+  "author": "Tero Saarni",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "piecewise-function": "^1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "node-red": "^0.19.5",
+    "node-red-node-test-helper": "^0.1.8",
+    "nodemon": "^1.18.9"
+  },
+  "node-red": {
+    "nodes": {
+      "interpolate": "interpolate.js"
+    }
+  },
+  "nodemonConfig": {
+    "ext": "js json html"
+  }
+}
