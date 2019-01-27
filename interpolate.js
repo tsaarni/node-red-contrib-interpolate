@@ -14,7 +14,10 @@ module.exports = function(RED) {
             f = Piecewise(x, y);
 
             var input = RED.util.evaluateNodeProperty(config.inputField, config.inputFieldType, node, msg);
-            RED.util.setMessageProperty(msg, config.inputField, f(input));
+            var output = f(input);
+            var minClamp = config.minClamp ? parseFloat(config.minClamp) : -Infinity;
+            var maxClamp = config.maxClamp ? parseFloat(config.maxClamp) : Infinity;
+            RED.util.setMessageProperty(msg, config.inputField, Math.min(Math.max(minClamp, output), maxClamp));
 
             node.send(msg);
         });

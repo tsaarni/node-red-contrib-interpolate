@@ -6,8 +6,10 @@
 
         defaults: {
             name:           {value: ""},
-            inputField:     {value: "payload", required: true},
-            inputFieldType: {value: "msg",     required: true},
+            inputField:     {value: "payload",   required: true},
+            inputFieldType: {value: "msg",       required: true},
+            minClamp:       {value: "", validate: RED.validators.number()},
+            maxClamp:       {value: "",  validate: RED.validators.number()},
             points:         {value: []}
         },
 
@@ -66,18 +68,29 @@
 <script type="text/x-red" data-template-name="interpolate">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <input type="text" id="node-input-name" style="width:300px;" placeholder="Name">
     </div>
+
     <div class="form-row">
-        <label for="node-input-inputField"><i class="fa fa-edit"></i> Input</label>
-        <input type="text" id="node-input-inputField" style="width:250px;">
+        <label><i class="fa fa-edit"></i> Input</label>
+        <input type="text" id="node-input-inputField" style="width:300px;">
         <input type="hidden" id="node-input-inputFieldType">
+    </div>
+
+    <div class="form-row">
+        <label><i class="fa fa-sign-out"></i> Clamp</label>
+        Min <input type="text" id="node-input-minClamp" style="width:110px;margin-right:20px">
+        Max <input type="text" id="node-input-maxClamp" style="width:110px">
     </div>
 
     <div class="form-row" style="margin-bottom:0;">
         <label><i class="fa fa-list"></i> Points</label>
     </div>
+
     <div class="form-row node-input-interpolation-points-container-row">
         <ol id="node-input-interpolation-points-container" style="min-height: 150px"></ol>
     </div>
+
+
+
 </script>
